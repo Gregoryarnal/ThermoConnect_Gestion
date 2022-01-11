@@ -1,4 +1,4 @@
-from thermogestion.protocol.Radio.RadioProtocol import radioProtocol
+from Radio.RadioProtocol import radioProtocol
 import configparser
 
 

@@ -1,4 +1,4 @@
-from thermogestion.protocol.protocolManager import protocolManager
+from protocol.ProtocolManager import protocolManager
 
 
 class thermogestion:
