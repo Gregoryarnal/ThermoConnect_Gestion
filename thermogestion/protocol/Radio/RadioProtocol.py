@@ -18,13 +18,14 @@ url = "http://152.228.213.48:8081"
 #url = "http://192.168.1.12:8081"
 
 class radioProtocol(object):
-    
+
     nrf = None
     pi = None
     bodySensor = None
     
     
     def __init__(self) -> None:
+
         super().__init__()
         print("Python NRF24 Simple Receiver Example.")
         # Parse command line argument.
@@ -85,7 +86,7 @@ class radioProtocol(object):
             # print(f'Protocol: {values[0]}, temperature: {values[1]}, humidity: {values[2]}')
             # print("Send to cloud....")
             date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            query = {
+            bodySensor = {
                 "bodyConnexion":{
                     "token" : self.bodySensor.token
                 },
@@ -93,12 +94,12 @@ class radioProtocol(object):
                 "date": date,
                 "value": round(values[1],2),
                 "idSensor" : self.bodySensor.idSensor,
-                "type": "temp"
+                "Type": "temp"
                 }
 
-            response = requests.post(url + '/addTerrariumData', json=query)
+            # response = requests.post(url + '/addTerrariumData', json=query)
             
-            return response
+            return bodySensor
     
     def _prepare_request(self):
         pass
@@ -107,61 +108,4 @@ class radioProtocol(object):
         traceback.print_exc()
         self.nrf.power_down()
         self.pi.stop()
-    
-    
-if __name__ == "__main__":
-
-
-
-
-    # # Enter a loop receiving data on the address specified.
-    # try:
-    #     print(f'Receive from {address}')
-    #     count = 0
-    #     while True:
-
-    #         # As long as data is ready for processing, process it.
-    #         while self.nrf.data_ready():
-    #             # Count message and record time of reception.            
-    #             count += 1
-    #             now = datetime.now()
-                
-    #             # Read pipe and payload for message.
-    #             pipe = self.nrf.data_pipe()
-    #             payload = self.nrf.get_payload()    
-
-    #             # Resolve protocol number.
-    #             protocol = payload[0] if len(payload) > 0 else -1            
-
-    #             hex = ':'.join(f'{i:02x}' for i in payload)
-
-    #             # Show message received as hex.
-    #             print(f"{now:%Y-%m-%d %H:%M:%S.%f}: pipe: {pipe}, len: {len(payload)}, bytes: {hex}, count: {count}")
-
-    #             # If the length of the message is 9 bytes and the first byte is 0x01, then we try to interpret the bytes
-    #             # sent as an example message holding a temperature and humidity sent from the "simple-sender.py" program.
-    #             if len(payload) == 9 and payload[0] == 0x01:
-    #                 values = struct.unpack("<Bff", payload)
-    #                 print(f'Protocol: {values[0]}, temperature: {values[1]}, humidity: {values[2]}')
-    #                 print("Send to cloud....")
-    #                 date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #                 query = {
-    #                     "bodyConnexion":{
-    #                         "token" : "81edd476-eda7-4f23-902f-cf4badba79db"
-    #                     },
-    #                     "idTerrarium": 8,
-    #                     "date": date,
-    #                     "value": round(values[1],2),
-    #                     "idSensor" : 3
-    #                     # "humidity": round(values[2],2)
-    #                     }
-
-    #                 response = requests.post(url + '/addTerrariumData', json=query)
-                
-    #         # # Sleep 100 ms.
-    #         time.sleep(5)
-    # except:
-    #     traceback.print_exc()
-    #     nrf.power_down()
-    #     pi.stop()
-
+  
