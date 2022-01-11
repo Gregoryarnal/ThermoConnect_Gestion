@@ -9,11 +9,10 @@ class ConfigParser(object):
         
         super().__init__()
         config = CP()
-        
-        
-        config.read('Config.ini')
 
+        config.read('../Config.ini')
         for el in config.sections():
+            print(el)
             if el == "Common":
                 for key in config[el]:  
                     if key == 'ip':

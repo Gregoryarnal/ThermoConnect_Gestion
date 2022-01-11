@@ -7,6 +7,6 @@ class thermogestion:
    def __init__(self)-> None:
        self.config = ConfigParser()
        print(self.config.get_config())
-       PManager = protocolManager()
+       PManager = protocolManager(self.config.get_config())
 
 thermogestion()
