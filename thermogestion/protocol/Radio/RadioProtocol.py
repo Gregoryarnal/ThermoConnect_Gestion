@@ -93,7 +93,7 @@ class radioProtocol(object):
                 "date": date,
                 "value": round(values[1],2),
                 "idSensor" : self.bodySensor.idSensor,
-                'type': "temp"
+                "type": "temp"
                 }
 
             response = requests.post(url + '/addTerrariumData', json=query)
