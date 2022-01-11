@@ -21,7 +21,6 @@ class radioProtocol(object):
 
     nrf = None
     pi = None
-    bodySensor = None
     
     
     def __init__(self) -> None:
@@ -108,4 +107,4 @@ class radioProtocol(object):
         traceback.print_exc()
         self.nrf.power_down()
         self.pi.stop()
-  
+
