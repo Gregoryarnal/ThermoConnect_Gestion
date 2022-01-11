@@ -18,12 +18,13 @@ url = "http://152.228.213.48:8081"
 #url = "http://192.168.1.12:8081"
 
 class radioProtocol(object):
-    
+
     nrf = None
     pi = None
     
     
     def __init__(self) -> None:
+
         super().__init__()
         print("Python NRF24 Simple Receiver Example.")
         # Parse command line argument.
@@ -84,7 +85,7 @@ class radioProtocol(object):
             # print(f'Protocol: {values[0]}, temperature: {values[1]}, humidity: {values[2]}')
             # print("Send to cloud....")
             date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            query = {
+            bodySensor = {
                 "bodyConnexion":{
                     "token" : self.bodySensor.token
                 },
@@ -92,12 +93,12 @@ class radioProtocol(object):
                 "date": date,
                 "value": round(values[1],2),
                 "idSensor" : self.bodySensor.idSensor,
-                "type": "temp"
+                "Type": "temp"
                 }
 
-            response = requests.post(url + '/addTerrariumData', json=query)
+            # response = requests.post(url + '/addTerrariumData', json=query)
             
-            return response
+            return bodySensor
     
     def _prepare_request(self):
         pass
@@ -106,3 +107,4 @@ class radioProtocol(object):
         traceback.print_exc()
         self.nrf.power_down()
         self.pi.stop()
+
