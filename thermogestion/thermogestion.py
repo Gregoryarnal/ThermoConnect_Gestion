@@ -1,18 +1,9 @@
+from thermogestion.protocol.protocolManager import protocolManager
 
 
 class thermogestion:
-    def base_method(self) -> str:
-        """
-        Base method.
-        """
-        return "hello from BaseClass"
 
-    def __call__(self) -> str:
-        return self.base_method()
+   def __init__(self)-> None:
+       PManager = protocolManager()
 
-
-def base_function() -> str:
-    """
-    Base function.
-    """
-    return "hello from base function"
+thermogestion()
