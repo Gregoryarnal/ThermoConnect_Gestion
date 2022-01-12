@@ -64,41 +64,42 @@ class radioProtocol(object):
     
     
     def catch(self):
-        now = datetime.now()
-        
-        # Read pipe and payload for message.
-        pipe = self.nrf.data_pipe()
-        payload = self.nrf.get_payload()    
-
-        # Resolve protocol number.
-        protocol = payload[0] if len(payload) > 0 else -1            
-
-        hex = ':'.join(f'{i:02x}' for i in payload)
-
-        # Show message received as hex.
-        print(f"{now:%Y-%m-%d %H:%M:%S.%f}: pipe: {pipe}, len: {len(payload)}, bytes: {hex}")
-
-        # If the length of the message is 9 bytes and the first byte is 0x01, then we try to interpret the bytes
-        # sent as an example message holding a temperature and humidity sent from the "simple-sender.py" program.
-        if len(payload) == 9 and payload[0] == 0x01:
-            values = struct.unpack("<Bff", payload)
-            # print(f'Protocol: {values[0]}, temperature: {values[1]}, humidity: {values[2]}')
-            # print("Send to cloud....")
-            date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            bodySensor = {
-                "bodyConnexion":{
-                    "token" : self.bodySensor.token
-                },
-                "idTerrarium": self.bodySensor.idTerrarium,
-                "date": date,
-                "value": round(values[1],2),
-                "idSensor" : self.bodySensor.idSensor,
-                "Type": "temp"
-                }
-
-            # response = requests.post(url + '/addTerrariumData', json=query)
+        while self.nrf.data_ready():
+            now = datetime.now()
             
-            return bodySensor
+            # Read pipe and payload for message.
+            pipe = self.nrf.data_pipe()
+            payload = self.nrf.get_payload()    
+
+            # Resolve protocol number.
+            protocol = payload[0] if len(payload) > 0 else -1            
+
+            hex = ':'.join(f'{i:02x}' for i in payload)
+
+            # Show message received as hex.
+            print(f"{now:%Y-%m-%d %H:%M:%S.%f}: pipe: {pipe}, len: {len(payload)}, bytes: {hex}")
+
+            # If the length of the message is 9 bytes and the first byte is 0x01, then we try to interpret the bytes
+            # sent as an example message holding a temperature and humidity sent from the "simple-sender.py" program.
+            if len(payload) == 9 and payload[0] == 0x01:
+                values = struct.unpack("<Bff", payload)
+                print(f'Protocol: {values[0]}, temperature: {values[1]}, humidity: {values[2]}, token: {values[3]}, IdTerrarium: {values[4]}, IdSensor: {values[5]}, Type: {values[6]}')
+                # print("Send to cloud....")
+                date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                bodySensor = {
+                    "bodyConnexion":{
+                        "token" : values[3],
+                    },
+                    "idTerrarium": values[4],
+                    "date": date,
+                    "value": round(values[1],2),
+                    "idSensor" : values[5],
+                    "Type": values[6]
+                    }
+
+                # response = requests.post(url + '/addTerrariumData', json=query)
+                
+                return bodySensor
     
     def _prepare_request(self):
         pass

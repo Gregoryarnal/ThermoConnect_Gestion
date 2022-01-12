@@ -5,7 +5,6 @@ class ConfigParser(object):
     config = {}
     
     def __init__(self) -> None:
-        print("log")
         
         super().__init__()
         config = CP()
@@ -26,9 +25,6 @@ class ConfigParser(object):
                         test = {}
                         test[key] = config[el][key]
                         self.config["Protocol"] = test
-
-        print("self.config")
-        print(self.config)
     
     def get_config(self):
         return self.config
