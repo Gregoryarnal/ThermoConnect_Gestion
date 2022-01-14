@@ -7,7 +7,8 @@ import traceback
 import requests
 import pigpio
 from nrf24 import *
-
+from datetime import datetime
+from random import normalvariate
 
 #
 # A simple NRF24L receiver that connects to a PIGPIO instance on a hostname and port, default "localhost" and 8888, and
@@ -59,11 +60,14 @@ class radioProtocol(object):
         # Listen on the address specified as parameter
         self.nrf.open_reading_pipe(RF24_RX_ADDR.P1, address)
         
+        
+        self.send()
         # Display the content of NRF24L01 device registers.
-        self.nrf.show_registers()
+        # self.nrf.show_registers()
     
     
     def catch(self):
+        return self.simulate_nrf24()
         while self.nrf.data_ready():
             now = datetime.now()
             
@@ -101,6 +105,65 @@ class radioProtocol(object):
                 
                 return bodySensor
     
+    def send(self):
+        # Emulate that we read temperature and humidity from a sensor, for example
+        # a DHT22 sensor.  Add a little random variation so we can see that values
+        # sent/received fluctuate a bit.
+        temperature = normalvariate(23.0, 0.5)
+        humidity = normalvariate(62.0, 0.5)
+        type = "temperature"
+        token = ""
+        IdSensor = 1
+        IdTerrarium = 12
+        print(f'Sensor values: temperature={temperature}, humidity: {humidity}, token: {token}, IdTerrarium: {IdTerrarium}, IdSensor: {IdSensor}, Type: {type}')
+
+        # Pack temperature and humidity into a byte buffer (payload) using a protocol 
+        # signature of 0x01 so that the receiver knows that the bytes we are sending 
+        # are a temperature and a humidity (see "simple-receiver.py").
+        payload = struct.pack("<Bff", 0x01, temperature, humidity)
+        print(payload)
+        # Send the payload to the address specified above.
+        self.nrf.reset_packages_lost()
+        self.nrf.send(payload)
+        
+        try:
+            self.nrf.wait_until_sent()
+        except TimeoutError:
+            print('Timeout waiting for transmission to complete.')
+            # Wait 10 seconds before sending the next reading.
+            time.sleep(10)
+            
+        
+        if self.nrf.get_packages_lost() == 0:
+            print(f"Success: lost={self.nrf.get_packages_lost()}, retries={self.nrf.get_retries()}")
+        else:
+            print(f"Error: lost={self.nrf.get_packages_lost()}, retries={self.nrf.get_retries()}")
+
+        # Wait 10 seconds before sending the next reading.
+        time.sleep(10)
+        
+        
+    def simulate_nrf24(self):
+        now = datetime.now()
+        temperature = normalvariate(23.0, 0.5)
+        humidity = normalvariate(62.0, 0.5)
+        type = "temperature"
+        token = ""
+        IdSensor = 1
+        IdTerrarium = 12
+        print(f'Sensor values: temperature={temperature}, humidity: {humidity}, token: {token}, IdTerrarium: {IdTerrarium}, IdSensor: {IdSensor}, Type: {type}')
+        
+        bodySensor = {
+                    "bodyConnexion":{
+                        "token" : token,
+                    },
+                    "idTerrarium": IdTerrarium,
+                    "date": now,
+                    "value": temperature,
+                    "idSensor" : IdSensor,
+                    "Type": type
+                    }
+        return bodySensor
     def _prepare_request(self):
         pass
         
