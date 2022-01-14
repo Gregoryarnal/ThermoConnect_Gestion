@@ -25,6 +25,10 @@ class ConfigParser(object):
                         test = {}
                         test[key] = config[el][key]
                         self.config["Protocol"] = test
+            elif el == "Sync":
+                for key in config[el]:  
+                    if key == 'cron':
+                        self.config["cron"] = config[el][key]
     
     def get_config(self):
         return self.config

@@ -8,7 +8,7 @@ import requests
 import pigpio
 from nrf24 import *
 from datetime import datetime
-from random import normalvariate
+from random import normalvariate, randint
 
 #
 # A simple NRF24L receiver that connects to a PIGPIO instance on a hostname and port, default "localhost" and 8888, and
@@ -43,14 +43,16 @@ class radioProtocol(object):
         # Verify that address is between 3 and 5 characters.
         if not (2 < len(address) < 6):
             print(f'Invalid address {address}. Addresses must be between 3 and 5 ASCII characters.')
-            sys.exit(1)
+            return
+            #sys.exit(1)
         
         # Connect to pigpiod
         print(f'Connecting to GPIO daemon on {hostname}:{port} ...')
         self.pi = pigpio.pi(hostname, port)
         if not self.pi.connected:
             print("Not connected to Raspberry Pi ... goodbye.")
-            sys.exit()
+            return
+            #sys.exit()
 
         # Create NRF24 object.
         # PLEASE NOTE: PA level is set to MIN, because test sender/receivers are often close to each other, and then MIN works better.
@@ -144,13 +146,15 @@ class radioProtocol(object):
         
         
     def simulate_nrf24(self):
+        time.sleep(10)
         now = datetime.now()
-        temperature = normalvariate(23.0, 0.5)
-        humidity = normalvariate(62.0, 0.5)
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        temperature = round(normalvariate(23.0, 0.5), 2)
+        humidity = round(normalvariate(62.0, 0.5), 2)
         type = "temperature"
-        token = ""
-        IdSensor = 1
-        IdTerrarium = 12
+        token = "b7145ef4-51e2-4975-82f1-0364363faafa"
+        IdSensor = randint(0,1) + 3
+        IdTerrarium = 8
         print(f'Sensor values: temperature={temperature}, humidity: {humidity}, token: {token}, IdTerrarium: {IdTerrarium}, IdSensor: {IdSensor}, Type: {type}')
         
         bodySensor = {
@@ -158,7 +162,7 @@ class radioProtocol(object):
                         "token" : token,
                     },
                     "idTerrarium": IdTerrarium,
-                    "date": now,
+                    "date": date,
                     "value": temperature,
                     "idSensor" : IdSensor,
                     "Type": type
