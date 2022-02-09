@@ -25,6 +25,10 @@ class ConfigParser(object):
                         test = {}
                         test[key] = config[el][key]
                         self.config["Protocol"] = test
+                    if key == 'wifi':
+                        dict = {}
+                        dict[key] = config[el][key]
+                        self.config["Protocol"] = dict
             elif el == "Sync":
                 for key in config[el]:  
                     if key == 'cron':

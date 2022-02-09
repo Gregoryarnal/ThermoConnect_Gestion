@@ -1,0 +1,43 @@
+{
+    "result": [
+        {
+            "active_time": 1643749634,
+            "biz_type": 0,
+            "category": "cz",
+            "create_time": 1643745008,
+            "icon": "smart/icon/ay1541056239985fDGjj/2ff39988cc63832733d87a78c09bd257.png",
+            "id": "bf26b01596ec63efd3xejb",
+            "ip": "86.195.51.27",
+            "lat": "48.6415",
+            "local_key": "38d03ddef9ec6765",
+            "lon": "1.8301",
+            "model": "sky",
+            "name": "Terrariums serpents",
+            "online": true,
+            "owner_id": "50128381",
+            "product_id": "hdjmdlmlrno6tqyr",
+            "product_name": "Smart Plug-FR",
+            "status": [
+                {
+                    "code": "switch_1",
+                    "value": false
+                },
+                {
+                    "code": "countdown_1",
+                    "value": 0
+                },
+                {
+                    "code": "relay_status",
+                    "value": "last"
+                }
+            ],
+            "sub": false,
+            "time_zone": "+01:00",
+            "uid": "eu1643749428369uP914",
+            "update_time": 1644017673,
+            "uuid": "30140018f77a4cfd"
+        }
+    ],
+    "success": true,
+    "t": 1644017872277
+}

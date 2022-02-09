@@ -7,3 +7,6 @@ requests
 pigpio
 nrf24
 apscheduler
+tinytuya
+flask
+paho-mqtt
