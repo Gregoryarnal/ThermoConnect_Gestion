@@ -2,6 +2,7 @@
 
 import random
 import threading
+from time import sleep
 from flask import Flask
 import tinytuya
 
@@ -19,7 +20,7 @@ class mqtt(object):
         self.broker = '152.228.213.48'
         self.manager = manager
         self.port = 1883
-        self.topic = "python/mqtt"
+        
         self.topic = "test"
         self.client_id = f'python-mqtt-{random.randint(0, 100)}'
         self.username = 'test'
@@ -41,7 +42,10 @@ class mqtt(object):
 
     def test(self, msg):
         print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
-        self.manager.wifi.change_status()
+        if "heartbeat" in msg.payload.decode():
+            self.manager.wifi.change_status()
+            sleep(.5)
+            self.manager.wifi.change_status()
 
     def subscribe(self, sclient: mqtt_client):
         def on_message(client, userdata, msg):
